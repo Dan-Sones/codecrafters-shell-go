@@ -16,8 +16,8 @@ func main() {
 
 	for {
 		fmt.Print("$ ")
-		text, err := reader.ReadString('\n')
-		text = strings.Replace(text, "\n", "", -1)
+		input, err := reader.ReadString('\n')
+		input = strings.Replace(input, "\n", "", -1)
 		if err != nil {
 			fmt.Println("Error reading input:", err)
 			continue
@@ -25,8 +25,11 @@ func main() {
 
 		supportedCommands := []string{}
 
-		if !slices.Contains(supportedCommands, text) {
-			fmt.Printf("%s: command not found \n", text)
+		if input == "exit" {
+			os.Exit(0)
+		}
+		if !slices.Contains(supportedCommands, input) {
+			fmt.Printf("%s: command not found \n", input)
 		}
 	}
 
