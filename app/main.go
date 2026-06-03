@@ -13,7 +13,7 @@ var _ = fmt.Print
 
 func main() {
 	reader := bufio.NewReader(os.Stdin)
-	builtIns := []string{"exit", "echo"}
+	builtIns := []string{"exit", "echo", "type"}
 
 	for {
 		fmt.Print("$ ")
