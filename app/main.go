@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"slices"
 	"strings"
 )
 
@@ -12,6 +13,7 @@ var _ = fmt.Print
 
 func main() {
 	reader := bufio.NewReader(os.Stdin)
+	builtIns := []string{"exit", "echo"}
 
 	for {
 		fmt.Print("$ ")
@@ -27,6 +29,14 @@ func main() {
 		}
 		if strings.HasPrefix(input, "echo") {
 			fmt.Println(input[5:])
+		}
+		if strings.HasPrefix(input, "type ") {
+			postFix := strings.TrimPrefix(input, "type ")
+			if slices.Contains(builtIns, postFix) {
+				fmt.Printf("%s is a built-in \n", postFix)
+			} else {
+				fmt.Printf("%s: not found \n", postFix)
+			}
 		} else {
 			fmt.Printf("%s: command not found \n", input)
 		}
