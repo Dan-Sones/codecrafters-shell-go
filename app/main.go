@@ -33,7 +33,7 @@ func main() {
 		if strings.HasPrefix(input, "type ") {
 			postFix := strings.TrimPrefix(input, "type ")
 			if slices.Contains(builtIns, postFix) {
-				fmt.Printf("%s is a shell built-in \n", postFix)
+				fmt.Printf("%s is a shell builtin \n", postFix)
 			} else {
 				fmt.Printf("%s: not found \n", postFix)
 			}
