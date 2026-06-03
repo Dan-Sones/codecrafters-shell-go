@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"slices"
 	"strings"
 )
 
@@ -23,12 +22,15 @@ func main() {
 			continue
 		}
 
-		supportedCommands := []string{}
-
 		if input == "exit" {
 			os.Exit(0)
 		}
-		if !slices.Contains(supportedCommands, input) {
+		if strings.Contains(input, "echo") {
+			split := strings.Split(input, " ")
+			if len(split) > 1 {
+				fmt.Println(strings.Join(split[1:], " "))
+			}
+		} else {
 			fmt.Printf("%s: command not found \n", input)
 		}
 	}
