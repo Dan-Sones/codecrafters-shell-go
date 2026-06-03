@@ -27,8 +27,8 @@ func main() {
 		if input == "exit" {
 			os.Exit(0)
 		}
-		if strings.HasPrefix(input, "echo") {
-			fmt.Println(input[5:])
+		if strings.HasPrefix(input, "echo ") {
+			fmt.Println(strings.TrimPrefix(input, "echo "))
 		}
 		if strings.HasPrefix(input, "type ") {
 			postFix := strings.TrimPrefix(input, "type ")
@@ -37,7 +37,8 @@ func main() {
 			} else {
 				fmt.Printf("%s: not found \n", postFix)
 			}
-		} else {
+		}
+		if !slices.Contains(builtIns, strings.Split(input, " ")[0]) {
 			fmt.Printf("%s: command not found \n", input)
 		}
 	}
