@@ -25,11 +25,8 @@ func main() {
 		if input == "exit" {
 			os.Exit(0)
 		}
-		if strings.Contains(input, "echo") {
-			split := strings.Split(input, " ")
-			if len(split) > 1 {
-				fmt.Println(strings.Join(split[1:], " "))
-			}
+		if strings.HasPrefix(input, "echo") {
+			fmt.Println(input[5:])
 		} else {
 			fmt.Printf("%s: command not found \n", input)
 		}
