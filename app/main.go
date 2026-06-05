@@ -52,13 +52,17 @@ func main() {
 func handlePathLookup(command string) {
 	// Read in the path environment variable
 	path := os.Getenv("PATH")
+	locations := strings.Split(path, string(os.PathListSeparator))
 
-	fileName, err := exec.LookPath(path)
-	if err == nil {
-		fileName, err = filepath.Abs(fileName)
-	}
-	if err != nil {
-		log.Fatal(err)
+	var fileName string
+	for _, location := range locations {
+		fileName, err := exec.LookPath(location)
+		if err == nil {
+			fileName, err = filepath.Abs(fileName)
+		}
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 
 	fmt.Printf("%s is %s\n", command, fileName)
