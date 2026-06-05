@@ -35,9 +35,10 @@ func main() {
 			postFix := strings.TrimPrefix(input, "type ")
 			if slices.Contains(builtIns, postFix) {
 				fmt.Printf("%s is a shell builtin \n", postFix)
+			} else if path, _ := exec.LookPath(postFix); path != "" {
+				fmt.Printf("%s is %s\n", postFix, path)
 			} else {
-				handlePathLookup(postFix)
-				//fmt.Printf("%s: not found \n", postFix)
+				fmt.Printf("%s: not found", postFix)
 			}
 		}
 		if !slices.Contains(builtIns, strings.Split(input, " ")[0]) {
@@ -45,13 +46,4 @@ func main() {
 		}
 	}
 
-}
-
-func handlePathLookup(command string) {
-
-	path, _ := exec.LookPath(command)
-	if path != "" {
-		fmt.Printf("%s is %s\n", command, path)
-		return
-	}
 }
