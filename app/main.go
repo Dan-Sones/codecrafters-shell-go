@@ -48,18 +48,10 @@ func main() {
 }
 
 func handlePathLookup(command string) {
-	// Read in the path environment variable
-	path := os.Getenv("PATH")
-	locations := strings.Split(path, string(os.PathListSeparator))
 
-	var fileName string
-	for _, location := range locations {
-		p, _ := exec.LookPath(location)
-		if p != "" {
-			fileName = p
-			break
-		}
+	path, _ := exec.LookPath(command)
+	if path != "" {
+		fmt.Printf("%s is %s\n", command, path)
+		return
 	}
-
-	fmt.Printf("%s is %s\n", command, fileName)
 }
