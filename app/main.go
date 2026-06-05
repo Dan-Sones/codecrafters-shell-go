@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
 	"slices"
@@ -43,29 +44,23 @@ func main() {
 				fmt.Printf("%s: not found\n", args[0])
 			}
 		default:
-			fmt.Printf("%s: command not found \n", input)
+			handleAmbiguousArgs(command, args)
+
 		}
+	}
+}
 
-		//	if input == "exit" {
-		//		os.Exit(0)
-		//	}
-		//	if strings.HasPrefix(input, "echo ") {
-		//		fmt.Println(strings.TrimPrefix(input, "echo "))
-		//	}
-		//	if strings.HasPrefix(input, "type ") {
-		//		postFix := strings.TrimPrefix(input, "type ")
-		//		if slices.Contains(builtIns, postFix) {
-		//			fmt.Printf("%s is a shell builtin \n", postFix)
-		//		} else if path, _ := exec.LookPath(postFix); path != "" {
-		//			fmt.Printf("%s is %s\n", postFix, path)
-		//		} else {
-		//			fmt.Printf("%s: not found\n", postFix)
-		//		}
-		//	}
-		//	if !slices.Contains(builtIns, strings.Split(input, " ")[0]) {
-		//		fmt.Printf("%s: command not found \n", input)
-		//	}
-		//}
-
+func handleAmbiguousArgs(command string, args []string) {
+	// first check to see if the program is on the path
+	if path, _ := exec.LookPath(command); path != "" {
+		cmd := exec.Command(command, args...)
+		cmd.Stdin = os.Stdin
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		if err := cmd.Run(); err != nil {
+			log.Fatal(err)
+		}
+	} else {
+		fmt.Printf("%s: command not found \n", command)
 	}
 }
