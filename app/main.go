@@ -38,7 +38,7 @@ func main() {
 			} else if path, _ := exec.LookPath(postFix); path != "" {
 				fmt.Printf("%s is %s\n", postFix, path)
 			} else {
-				fmt.Printf("%s: not found", postFix)
+				fmt.Printf("%s: not found\n", postFix)
 			}
 		}
 		if !slices.Contains(builtIns, strings.Split(input, " ")[0]) {
