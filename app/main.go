@@ -3,10 +3,8 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"log"
 	"os"
 	"os/exec"
-	"path/filepath"
 	"slices"
 	"strings"
 )
@@ -56,13 +54,8 @@ func handlePathLookup(command string) {
 
 	var fileName string
 	for _, location := range locations {
-		fileName, err := exec.LookPath(location)
-		if err == nil {
-			fileName, err = filepath.Abs(fileName)
-		}
-		if err != nil {
-			log.Fatal(err)
-		}
+		p, _ := exec.LookPath(location)
+		fileName = p
 	}
 
 	fmt.Printf("%s is %s\n", command, fileName)
