@@ -3,7 +3,10 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"log"
 	"os"
+	"os/exec"
+	"path/filepath"
 	"slices"
 	"strings"
 )
@@ -35,7 +38,8 @@ func main() {
 			if slices.Contains(builtIns, postFix) {
 				fmt.Printf("%s is a shell builtin \n", postFix)
 			} else {
-				fmt.Printf("%s: not found \n", postFix)
+				handlePathLookup(postFix)
+				//fmt.Printf("%s: not found \n", postFix)
 			}
 		}
 		if !slices.Contains(builtIns, strings.Split(input, " ")[0]) {
@@ -43,4 +47,19 @@ func main() {
 		}
 	}
 
+}
+
+func handlePathLookup(command string) {
+	// Read in the path environment variable
+	path := os.Getenv("PATH")
+
+	fileName, err := exec.LookPath(path)
+	if err == nil {
+		fileName, err = filepath.Abs(fileName)
+	}
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Printf("%s is %s\n", command, fileName)
 }
