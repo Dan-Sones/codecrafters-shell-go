@@ -55,7 +55,10 @@ func handlePathLookup(command string) {
 	var fileName string
 	for _, location := range locations {
 		p, _ := exec.LookPath(location)
-		fileName = p
+		if p != "" {
+			fileName = p
+			break
+		}
 	}
 
 	fmt.Printf("%s is %s\n", command, fileName)
