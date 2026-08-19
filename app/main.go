@@ -55,10 +55,15 @@ func main() {
 }
 
 func handleCd(args []string) {
-	err := os.Chdir(args[0])
+	directory := args[0]
+	if directory == "~" {
+		directory = os.Getenv("HOME")
+	}
+
+	err := os.Chdir(directory)
 	if err != nil {
 		if errors.Is(err, fs.ErrNotExist) {
-			fmt.Printf("cd: %s: No such file or directory\n", args[0])
+			fmt.Printf("cd: %s: No such file or directory\n", directory)
 		}
 	}
 }
