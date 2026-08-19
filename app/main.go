@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"log"
 	"os"
 	"os/exec"
 	"slices"
@@ -15,7 +14,7 @@ var _ = fmt.Print
 
 func main() {
 	reader := bufio.NewReader(os.Stdin)
-	builtIns := []string{"exit", "echo", "type"}
+	builtIns := []string{"exit", "echo", "type", "pwd"}
 
 	for {
 		fmt.Print("$ ")
@@ -43,23 +42,34 @@ func main() {
 			} else {
 				fmt.Printf("%s: not found\n", args[0])
 			}
+		case "pwd":
+			handlePwd()
 		default:
 			handleAmbiguousArgs(command, args)
-
 		}
 	}
 }
 
+func handlePwd() {
+	// Although stack overflow said this is the new way to do things, it doesn't work!
+	//ex, err := os.Executable()
+	//if err != nil {
+	//	panic(err)
+	//}
+	//exPath := filepath.Dir(ex)
+	exPath, _ := os.Getwd()
+	fmt.Println(exPath)
+}
+
+func executeCommand(command string, args []string) error {
+	cmd := exec.Command(command, args...)
+	cmd.Stdin, cmd.Stdout, cmd.Stderr = os.Stdin, os.Stdout, os.Stderr
+	return cmd.Run()
+}
+
 func handleAmbiguousArgs(command string, args []string) {
-	// first check to see if the program is on the path
 	if path, _ := exec.LookPath(command); path != "" {
-		cmd := exec.Command(command, args...)
-		cmd.Stdin = os.Stdin
-		cmd.Stdout = os.Stdout
-		cmd.Stderr = os.Stderr
-		if err := cmd.Run(); err != nil {
-			log.Fatal(err)
-		}
+		executeCommand(command, args)
 	} else {
 		fmt.Printf("%s: command not found \n", command)
 	}
