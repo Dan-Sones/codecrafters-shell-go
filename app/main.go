@@ -2,7 +2,9 @@ package main
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
+	"io/fs"
 	"os"
 	"os/exec"
 	"slices"
@@ -44,8 +46,19 @@ func main() {
 			}
 		case "pwd":
 			handlePwd()
+		case "cd":
+			handleCd(args)
 		default:
 			handleAmbiguousArgs(command, args)
+		}
+	}
+}
+
+func handleCd(args []string) {
+	err := os.Chdir(args[0])
+	if err != nil {
+		if errors.Is(err, fs.ErrNotExist) {
+			fmt.Printf("cd: %s: No such file or directory\n", args[0])
 		}
 	}
 }
