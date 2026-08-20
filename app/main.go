@@ -60,10 +60,11 @@ func tokenize(input string) []string {
 	currentToken := ""
 
 	for _, c := range input {
-
-		if c == '\\' && !escapeEnabled {
-			escapeEnabled = true
-			continue
+		if !singleQuoteMode && !doubleQuoteMode {
+			if c == '\\' && !escapeEnabled {
+				escapeEnabled = true
+				continue
+			}
 		}
 
 		if escapeEnabled {
@@ -72,7 +73,7 @@ func tokenize(input string) []string {
 			continue
 		}
 
-		if c == '"' {
+		if !singleQuoteMode && c == '"' {
 			doubleQuoteMode = !doubleQuoteMode
 			continue
 		}
