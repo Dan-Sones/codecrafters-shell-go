@@ -54,16 +54,24 @@ func main() {
 func tokenize(input string) []string {
 	var tokens []string
 
-	quoteMode := false
+	singleQuoteMode := false
+	doubleQuoteMode := false
 	currentToken := ""
+
 	for _, c := range input {
-		if c == '\'' {
-			quoteMode = !quoteMode
+
+		if c == '"' {
+			doubleQuoteMode = !doubleQuoteMode
 			continue
 		}
 
-		// If we're not in a quote and encounter a space
-		if !quoteMode && c == ' ' {
+		if !doubleQuoteMode && c == '\'' {
+			singleQuoteMode = !singleQuoteMode
+			continue
+		}
+
+		// If we're not in a single quote or double quote and encounter a space
+		if !singleQuoteMode && !doubleQuoteMode && c == ' ' {
 			if len(currentToken) > 0 {
 				// A word is in progress so we should append curr token and reset
 				tokens = append(tokens, currentToken)
