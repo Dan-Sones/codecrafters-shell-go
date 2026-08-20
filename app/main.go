@@ -11,9 +11,6 @@ import (
 	"strings"
 )
 
-// Ensures gofmt doesn't remove the "fmt" import in stage 1 (feel free to remove this!)
-var _ = fmt.Print
-
 func main() {
 	reader := bufio.NewReader(os.Stdin)
 	builtIns := []string{"exit", "echo", "type", "pwd"}
@@ -27,7 +24,7 @@ func main() {
 			continue
 		}
 
-		parts := strings.Split(input, " ")
+		parts := tokenize(input)
 		command := parts[0]
 		args := parts[1:]
 
@@ -52,6 +49,35 @@ func main() {
 			handleAmbiguousArgs(command, args)
 		}
 	}
+}
+
+func tokenize(input string) []string {
+	var tokens []string
+
+	quoteMode := false
+	currentToken := ""
+	for _, c := range input {
+		if c == '\'' {
+			quoteMode = !quoteMode
+			continue
+		}
+
+		// If we're not in a quote and encounter a space
+		if !quoteMode && c == ' ' {
+			if len(currentToken) > 0 {
+				// A word is in progress so we should append curr token and reset
+				tokens = append(tokens, currentToken)
+				currentToken = ""
+			}
+			// move on anyways cause it's a space
+			continue
+		}
+
+		currentToken += string(c)
+	}
+
+	tokens = append(tokens, currentToken)
+	return tokens
 }
 
 func handleCd(args []string) {
